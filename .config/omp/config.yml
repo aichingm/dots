@@ -1,0 +1,78 @@
+---
+"$schema": https://raw.githubusercontent.com/JanDeDobbeleer/oh-my-posh/main/themes/schema.json
+palette:
+  white: "#FFFFFF"
+  tan: "#CC3802"
+  teal: "#047E84"
+  plum: "#9A348E"
+  blush: "#DA627D"
+  salmon: "#FCA17D"
+  sky: "#86BBD8"
+  teal_blue: "#33658A"
+blocks:
+- type: prompt
+  alignment: left
+  segments:
+  - background: p:plum
+    foreground: p:white
+#   leading_diamond: ""
+    trailing_diamond: ""
+    style: diamond
+    template: " {{ .UserName }}"
+    type: session
+  - type: os
+    powerline_symbol: ""
+    style: powerline
+    foreground: p:white
+    background: p:plum
+    template: " {{.Icon}} "
+  - background: p:blush
+    foreground: p:white
+    powerline_symbol: ""
+    properties:
+      style: folder
+    style: powerline
+    template: " {{ .Path }} "
+    type: path
+  - background: p:salmon
+    foreground: p:white
+    powerline_symbol: ""
+    properties:
+      branch_max_length: 25
+      fetch_stash_count: true
+      fetch_status: true
+      fetch_upstream_icon: true
+      branch_icon: ''
+      branch_identical_icon: ''
+    style: powerline
+    template: " {{ .UpstreamIcon }}{{ .HEAD }}
+              {{if .BranchStatus }}{{ .BranchStatus }}{{ end
+              }}{{ if gt (add .Staging.Unmerged .Staging.Deleted .Staging.Added .Staging.Modified .Staging.Untracked) 0 }}<red>{{
+                add .Staging.Unmerged .Staging.Deleted .Staging.Added .Staging.Modified .Staging.Untracked }}</>{{ end
+              }}{{ if add .Working.Deleted .Working.Added .Working.Modified }}<blue>{{  add .Working.Deleted .Working.Added .Working.Modified  }}</>{{ end
+              }}{{ if gt .Working.Untracked 0 }}<grey>󰇘{{ .Working.Untracked }}</>{{ end
+              }}{{ if gt .Working.Unmerged  0 }}<yellow>󱐋{{ .Working.Unmerged }}</>{{ end
+              }} "
+    type: git
+  - background: p:teal_blue
+    foreground: p:white
+    properties:
+      time_format: '15:04'
+    style: diamond
+    template: " ♥ {{ .CurrentDate | date .Format }} "
+    trailing_diamond: ""
+    type: time
+- type: rprompt
+  segments:
+  - type: executiontime
+    style: diamond
+    leading_diamond:  "\ue0b2"
+    foreground: "#8f8f8f"
+    background: "#3C3C3C"
+    template: " {{ .FormattedMs }} "
+    properties:
+      threshold: 500
+      always_enabled: true
+final_space: true
+version: 2
+

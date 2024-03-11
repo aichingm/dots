@@ -1,0 +1,21 @@
+MenuBar=Disabled
+
+[Desktop Entry]
+DefaultProfile=MyProfile.profile
+
+[General]
+ConfigVersion=1
+
+[MainWindow]
+3440x1440 screen: Height=664
+3440x1440 screen: Width=1133
+3440x1440 screen: XPosition=1153
+3440x1440 screen: YPosition=402
+DisplayPort-1=DisplayPort-1
+MenuBar=Disabled
+RestorePositionForNextInstance=false
+State=AAAA/wAAAAD9AAAAAQAAAAAAAAAAAAAAAPwCAAAAAvsAAAAcAFMAUwBIAE0AYQBuAGEAZwBlAHIARABvAGMAawAAAAAA/////wAAARUBAAAD+wAAACIAUQB1AGkAYwBrAEMAbwBtAG0AYQBuAGQAcwBEAG8AYwBrAAAAAAD/////AAABfAEAAAMAAARtAAACmAAAAAQAAAAEAAAACAAAAAj8AAAAAQAAAAIAAAACAAAAFgBtAGEAaQBuAFQAbwBvAGwAQgBhAHIAAAAAAP////8AAAAAAAAAAAAAABwAcwBlAHMAcwBpAG8AbgBUAG8AbwBsAGIAYQByAAAAAAD/////AAAAAAAAAAA=
+ToolBarsMovable=Disabled
+
+[UiSettings]
+ColorScheme=
