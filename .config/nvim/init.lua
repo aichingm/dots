@@ -28,6 +28,10 @@ require('lazy').setup({
   { -- Autocompletion
     'hrsh7th/nvim-cmp',
     dependencies = {
+      'ray-x/cmp-treesitter',
+      'hrsh7th/cmp-path',
+      'hrsh7th/cmp-calc',
+      'f3fora/cmp-spell',
       'L3MON4D3/LuaSnip',
       'saadparwaiz1/cmp_luasnip',
       'rafamadriz/friendly-snippets',
@@ -271,6 +275,22 @@ require('lazy').setup({
       vim.keymap.set({'n'}, '<Leader>vi', function() vim.fn.execute("IBLToggle") end, { silent = true, desc = "Toggle indentation rails" })
     end,
   },
+  { -- tab bar
+    "romgrk/barbar.nvim",
+    opts = {
+     sidebar_filetypes = {
+       ['neo-tree'] = {event = 'BufWipeout', text = 'Neo-Tree', align = 'center'},
+     },
+    },
+  },
+  { -- status
+    "nvim-lualine/lualine.nvim",
+    dependencies = { 'nvim-tree/nvim-web-devicons' },
+    event = "VeryLazy",
+    opts = function(_, opts)
+      return { theme = 'gruvbox' }
+    end,
+  },
 }, {})
 -- More
 -- Bookmarks https://github.com/tomasky/bookmarks.nvim
@@ -282,7 +302,6 @@ require('lazy').setup({
 -- Code runner https://github.com/desdic/greyjoy.nvim
 -- Renaming https://github.com/filipdutescu/renamer.nvim
 -- Folding https://github.com/anuvyklack/pretty-fold.nvim
---
 
 -- Bind Todo Manager
 vim.keymap.set({'n'}, '<Leader>pt', ':TodoLocList<CR>')
@@ -291,7 +310,9 @@ vim.keymap.set({'n'}, '<Leader>vt', function() vim.fn.execute(":TodoLocList cwd=
 -- Set Theme
 vim.o.background = "dark"
 vim.cmd("colorscheme kanagawa") -- needed for initial reset
-vim.cmd("colorscheme miasma")
+-- vim.cmd("colorscheme nightfox")
+vim.cmd("colorscheme nordfox")
+
 
 local csDark = {
   "kanagawa",
@@ -383,7 +404,7 @@ vim.keymap.set({'n'}, '<Leader>ü', function()
   vim.cmd("colorscheme " .. s)
   require("notify")("Color: " .. s)
 end, { silent = true, desc = "Switch to dark color scheme" })
- -- B
+
 vim.keymap.set({'n'}, '<Leader>ä', function()
   if csCurrentDark then
     csCurrentDark = false
@@ -398,8 +419,10 @@ end, { silent = true, desc = "Switch to light color scheme" })
 
 
 -- hide current mode
-vim.o.showmode = false
-
+--vim.o.showmode = false
+--vim.o.ruler = false
+--vim.o.showcmd = false
+vim.o.cmdheight = 0
 vim.opt.laststatus = 0
 
 vim.keymap.set({'n'}, '<Leader>vl', function()
@@ -432,7 +455,6 @@ vim.keymap.set({'n'}, '<Leader>vn', function()
   vim.wo.number        = not vim.wo.number
   vim.o.relativenumber = not vim.o.relativenumber
 end, { silent = true, desc = "Toggle line numbers" })
-
 
 -- Enable mouse mode
 vim.o.mouse = 'nv'
@@ -510,9 +532,48 @@ local luasnip = require 'luasnip'
 require('luasnip.loaders.from_vscode').lazy_load()
 luasnip.config.setup {}
 
+local cmp_menu_mapping = {
+  treesitter = "[TS]",
+  luasnip = "[LS]",
+  buffer = "[BF]",
+  path = "[FS]",
+  spell = "[SP]",
+  calc = "[CC]",
+
+}
+
+local cmp_kind_mapping = {
+  -- path
+  File = "Fil",
+  Folder = "Dir",
+  Snippet = "Snp",
+  -- treesitter
+  Variable = "Var",
+  VariableMember = "Var",
+  Text = "Txt",
+  FunctionMethod = "Met",
+  Function = "Fnc",
+  Constant = "Cns",
+  Text = "Txt",
+  Type = "Typ",
+}
+
 cmp.setup {
   completion = {
     autocomplete = false
+  },
+  formatting = {
+    fields = { 'abbr', 'kind', 'menu' },
+    format = function (entry, vim_item)
+      vim_item.menu = entry.source.name
+      if cmp_kind_mapping[vim_item.kind] ~= nil then
+        vim_item.kind = cmp_kind_mapping[vim_item.kind]
+      end
+      if cmp_menu_mapping[vim_item.menu] ~= nil then
+        vim_item.menu = cmp_menu_mapping[vim_item.menu]
+      end
+      return vim_item
+    end
   },
   mapping = cmp.mapping.preset.insert {
     ['<C-n>'] = cmp.mapping.select_next_item(),
@@ -559,13 +620,50 @@ cmp.setup {
     end, { 'i', 's' }),
   },
   sources = {
-    { name = 'luasnip' },
-    { name = 'buffer' },
+    { name = 'calc' },
+    { name = 'path' },
+    -- spell loads f3fora/cmp-spell uses vims spellsuggest to source words
+    { name = 'spell',
+      option = {
+        keep_all_entries = true,
+        enable_in_context = function() return true end,
+      },
+      entry_filter = function(entry, ctx)
+        -- only show words without spaces
+        return string.find(entry:get_word(), " ") == nil
+      end,
+      max_item_count = 5,
+    },
+    { name = 'treesitter',
+      entry_filter = function(entry, ctx)
+        -- filter simple text tokens
+        local kind = entry:get_vim_item(0).kind
+        return kind ~= 'Text' and
+          kind ~= 'Number' and
+          kind ~= 'Boolean' and
+          kind ~= 'String' and
+          kind ~= 'Operator' and
+          kind ~= 'Comment' and
+          kind ~= 'Constructor' and
+          kind ~= 'StringEscape' and
+          kind ~= 'StringRegexp' and
+          kind ~= 'NonePunctuationSpecial' and
+          kind ~= 'ConstantBuiltin' and
+          not string.match(kind, "Keyword.*")
+      end
+    },
+    -- ?? buffer loads hrsh7th/cmp-buffer which sources words from open buffers
+    { name = 'buffer',
+      max_item_count = 5,
+    },
+    -- luasnip loads saadparwaiz1/cmp_luasnip which depends on L3MON4D3/LuaSnip which loads templates from rafamadriz/friendly-snippets
+    { name = 'luasnip', option = { use_show_condition = false },
+      max_item_count = 5,
+    },
   },
 }
 
 -- Personal Keymappings
-
 vim.keymap.set('i', '<C-Del>', function ()
   local pos = vim.fn.col(".")
   local epos = vim.fn.col("$")
@@ -592,7 +690,36 @@ vim.keymap.set('i', '<C-Del>', function ()
   end
 end , { desc = "Delete word forward", silent = true })
 
-vim.keymap.set('i', '<C-h>', '<C-w>', { desc = "Delete word backwords", noremap = true, silent = true })
+vim.keymap.set('i', '<C-h>', function ()
+  local pos = vim.fn.col(".")
+  local line = vim.fn.getline(".")
+  local prevChar = vim.fn.strpart(line, vim.fn.col(".")-2, 1, 1)
+  local deleteMatch = function(str, pos, regex)
+    local start = string.sub(str, 0, pos-1)
+    local match = string.match(start, regex)
+    return string.sub(start, 0, pos-string.len(match)-1) .. string.sub(str, pos)
+  end
+
+  if pos == 1 or pos == 0 then
+    vim.fn.execute('normal h$Jx')
+    vim.fn.cursor(vim.fn.line("."), pos)
+  elseif string.match(prevChar, '[%a%d]') then
+    vim.fn.setline(".", deleteMatch(line, pos, '[%a%d]*$'))
+  elseif string.match(prevChar, '[%s]') then
+    vim.fn.setline(".", deleteMatch(line, pos, '[%s]*$'))
+  elseif string.match(prevChar, '[%p]') then
+    vim.fn.setline(".", deleteMatch(line, pos, '[%p]*$'))
+  else
+    require("notify")("what just happened?")
+    -- delete from the end of this line ü
+    -- delete from the end of this line ↰
+    return nil
+  end
+
+  vim.fn.cursor(vim.fn.line("."), pos-(string.len(line) - string.len(vim.fn.getline("."))))
+
+end , { desc = "Delete word backwords", silent = true })
+
 vim.keymap.set({'n', 'v', 'i'}, '<M-x>', '<esc>', { desc = "Escape", silent = true })
 
 vim.keymap.set('v', 'a', 'I', { desc = "Enter insert mode in visual mode", silent = true })
@@ -655,7 +782,6 @@ vim.keymap.set({'n', 'i'}, '<M-j>', '<esc>A<CR><esc>', { desc = "Add new line af
 vim.keymap.set({'i'}, '<M-w>', '<esc>:w!<CR>a', { desc = "Save file", silent = true })
 vim.keymap.set({'n'}, '<M-w>', '<esc>:w!<CR>', { desc = "Save file", silent = true })
 
-vim.keymap.set({'n', 'i'}, '<M-q>', '<esc>:q<CR>', { desc = "Close Window", silent = true })
 
 vim.keymap.set({'n'}, '<Leader>-', ':sp<CR>', { desc = "Split window horizontally", silent = true })
 vim.keymap.set({'n'}, '<Leader>7', ':vsp<CR>', { desc = "Split window vertically", silent = true })
@@ -668,11 +794,16 @@ vim.keymap.set({'i'}, '<M-Down>', '<esc>:m+1<CR>a', { desc = "Move line down", s
 vim.keymap.set({'n'}, '<M-Up>', ':m-2<CR>', { desc = "Move line up", silent = true })
 vim.keymap.set({'i'}, '<M-Up>', '<esc>:m-2<CR>a', { desc = "Move line up", silent = true })
 
-vim.keymap.set({'i', 'n', 'v'}, '<M-c>', '<esc>:bdelete<CR>', { desc = "Close current buffer", silent = true })
+-- Buffers
+vim.keymap.set({'n', 'i'}, '<M-PageUp>', ':bprevious<CR>', { desc = "Show previous buffer", silent = true })
+vim.keymap.set({'n', 'i'}, '<M-PageDown>', ':bnext<CR>', { desc = "Show next buffer", silent = true })
+vim.keymap.set({'n', 'i'}, '<M-q>', '<esc>:BufferClose<CR>', { desc = "Close barbar tab", silent = true })
 
-vim.keymap.set({'n'}, '<Leader><PageDown>', ':bnext<CR>', { desc = "Show next buffer", silent = true })
+vim.keymap.set({'n', 'i'}, '<M-S-q>', '<esc>:q<CR>', { desc = "Close barbar tab", silent = true })
+
 vim.keymap.set({'n'}, '<Leader><PageUp>', ':bprevious<CR>', { desc = "Show previous buffer", silent = true })
-vim.keymap.set({'n'}, '<Leader>bq', ':bdelete<CR>', { desc = "Delete buffer", silent = true })
+vim.keymap.set({'n'}, '<Leader><PageDown>', ':bnext<CR>', { desc = "Show next buffer", silent = true })
+
 
 vim.keymap.set({'n'}, '<Leader><Left>', '<C-w><Left>', { desc = "Focus left window", silent = true })
 vim.keymap.set({'n'}, '<Leader><Up>', '<C-w><Up>', { desc = "Focus top window", silent = true })
