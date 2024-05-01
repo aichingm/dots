@@ -31,12 +31,6 @@ stow . -t ~
 * .local/share/konsole/MyProfile.profile
 * .config/konsolerc
 
-### Konsole
-#### Files
-
-* .local/share/konsole/MyProfile.profile
-* .config/konsolerc
-
 ### Vim
 #### Files
 
