@@ -14,11 +14,64 @@ export XDG_CACHE_HOME=${XDG_CACHE_HOME:="$HOME/.cache"}
 export XDG_DATA_HOME=${XDG_DATA_HOME:="$HOME/.local/share"}
 export XDG_STATE_HOME=${XDG_STATE_HOME:="$HOME/.local/state"}
 
-# ---- GTK CONFIG  ---- #
+# ---- GTK CONFIG ---- #
 export GTK_USE_PORTAL=1
 
-# ---- ALIASES  ---- #
+# ---- FIREFOX CONFIG ---- #
+export MOZ_USE_XINPUT2=1
+
+# ---- ELECTRON CONFIG ---- #
+export ELECTRON_TRASH=kioclient5
+
+# ---- ALIASES ---- #
+alias ..='cd ..'
 alias ls='ls --color=auto'
 alias ls='ls -A --color=auto'
 alias rm='trash-put'
+alias delete=/usr/bin/rm
+alias tar='bsdtar'
+alias tree='tree -a'
+alias fm4.orf.at='cvlc https://fm4shoutcast.sf.apa.at/;'
+alias 247dnb='cvlc http://stream.247drumandbass.com:8000/256k.ogg'
+
+
+# ---- FUNCTIONS ---- #
+
+function open {
+    for var in "$@"
+    do
+        xdg-open "$var"
+    done
+}
+
+function mvld {
+    DOWNLOADS=~/Downloads
+    NEWFILE=/$(ls -1c $DOWNLOADS | head -1)
+    if [ -e "$1" ]
+    then
+        DIR=$1
+    else
+        DIR=.
+    fi
+    if [ -e "$DIR$NEWFILE" ]
+    then
+        echo Can\'t mv file $NEWFILE exists
+        return 1
+    else
+        echo moved $DOWNLOADS$NEWFILE to $DIR$NEWFILE use ↑ to revert
+        mv $DOWNLOADS$NEWFILE $DIR$NEWFILE
+        REVERT="\"$DIR$NEWFILE\" \"$DOWNLOADS$NEWFILE\""
+        if [[ "$(whichshell)" == "zsh" ]]
+        then
+            print -s "mv $REVERT"
+        elif [[ "$(whichshell)" == "bash" ]]
+        then
+            history -s "mv $REVERT"
+        fi
+    fi
+}
+
+function whichshell {
+     \ps $$ | \tail -1 | \grep --regexp="[a-zA-Z]*$" --only-matching
+}
 
