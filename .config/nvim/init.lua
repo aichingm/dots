@@ -38,6 +38,7 @@ require('lazy').setup({
     config = function()
       local lspconfig = require('lspconfig')
       lspconfig.gopls.setup{}
+      lspconfig.clangd.setup{}
     end,
   },
 
@@ -223,7 +224,7 @@ require('lazy').setup({
       },
     },
   },
-  
+
   { -- indentation rails
     "lukas-reineke/indent-blankline.nvim",
     main = "ibl",
@@ -245,7 +246,7 @@ require('lazy').setup({
       vim.keymap.set({'n'}, '<Leader>vi', function() vim.fn.execute("IBLToggle") end, { silent = true, desc = "Toggle indentation rails" })
     end,
   },
-  
+
   { -- tab bar
     "romgrk/barbar.nvim",
     opts = {
@@ -254,7 +255,7 @@ require('lazy').setup({
      },
     },
   },
-  
+
   { -- status
     "nvim-lualine/lualine.nvim",
     dependencies = { 'nvim-tree/nvim-web-devicons' },
@@ -267,7 +268,7 @@ require('lazy').setup({
   { -- telescope
     'nvim-telescope/telescope.nvim', tag = '0.1.8',
     dependencies = { 'nvim-lua/plenary.nvim' },
-    config = function() 
+    config = function()
       require('telescope').setup({
         defaults = {
           layout_strategy = 'vertical',
@@ -316,6 +317,7 @@ vim.keymap.set('n', '<leader>fi', telescope_builtin.lsp_implementations, {})
 vim.keymap.set('n', '<leader>fd', telescope_builtin.lsp_definitions, {})
 vim.keymap.set('n', '<leader>ft', telescope_builtin.lsp_type_definitions, {})
 vim.keymap.set('n', '<leader>fs', telescope_builtin.lsp_document_symbols, {})
+vim.keymap.set('n', '<leader>fl', function()telescope_builtin.diagnostics({bufnr=0})end, {})
 
 -- Set Theme
 vim.o.background = "dark"
@@ -333,7 +335,6 @@ local csDark = {
   "accent",
   "atlas",
   "fogbell",
-  "fogbell_lite",
   "abscs",
   "melange",
   "miasma",
@@ -645,6 +646,7 @@ vim.api.nvim_create_autocmd('LspAttach', {
     -- LSP actions
     vim.keymap.set('n', '<leader>ar', vim.lsp.buf.rename, opts)
     vim.keymap.set({ 'n', 'v' }, '<leader>ac', vim.lsp.buf.code_action, opts)
+    vim.keymap.set({ 'n' }, '<leader>ad', function() vim.diagnostic.open_float() end, opts)
     vim.keymap.set('n', '<leader>af', function()
       vim.lsp.buf.format { async = true }
     end, opts)
