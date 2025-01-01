@@ -20,10 +20,13 @@ zstyle ':completion:*' squeeze-slashes true
 zstyle ':completion:*' verbose true
 zstyle :compinstall filename "$HOME/.zshrc"
 
+mkdir -p ~/.local/share/zsh_completions
+fpath=(~/.local/share/zsh_completions $fpath)
 autoload -Uz compinit
 compinit
 # End of lines added by compinstall
 # Lines configured by zsh-newuser-install
+mkdir -p ~/.local/state/zsh/
 HISTFILE=~/.local/state/zsh/histfile
 HISTSIZE=10000
 SAVEHIST=10000
@@ -89,7 +92,7 @@ if [ -f "$HOME/.config/omp/config.yml" ] && hash oh-my-posh; then
     # Fix omp not being all the way to the right
     ZLE_RPROMPT_INDENT=0
     eval "$(oh-my-posh init zsh --config ~/.config/omp/config.yml)"
-elif [[ "$TERM" != "dumb" ]]; then
+elif [[ "$TERM" != "dumb" && "$(which git_status_prompt)" != "" ]]; then
     export PROMPT='%B%(?..[%?] )%b%n@%U%m%u%b${$(git_status_prompt)}> '
     export RPROMPT="%F{${1:-green}}%~%f"
 else
@@ -98,17 +101,21 @@ fi
 
 
 
-if [ -f /usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh ]; then
+if [ -f /usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh ]; then # Arch
    source /usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+elif [ -f /usr/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh ]; then # Ubuntu
+   source /usr/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 else
-   echo "zshrc: fialed to source zsh-syntax-highlighting.zsh"
+   echo "zshrc: failed to source zsh-syntax-highlighting.zsh"
 fi
 
-if [ -f /usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh ]; then
-   ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE='fg=#4c4c4c'
+ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE='fg=#4c4c4c'
+if [ -f /usr/share/zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh ]; then # Arch
    source /usr/share/zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh
+elif [ -f /usr/share/zsh-autosuggestions/zsh-autosuggestions.zsh ]; then # Ubuntu
+   source /usr/share/zsh-autosuggestions/zsh-autosuggestions.zsh
 else
-   echo "zshrc: fialed to source zsh-autosuggestions.zsh"
+   echo "zshrc: failed to source zsh-autosuggestions.zsh"
 fi
 
 
