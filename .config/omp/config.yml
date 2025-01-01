@@ -49,7 +49,7 @@ blocks:
               {{if .BranchStatus }}{{ .BranchStatus }}{{ end
               }}{{ if gt (add .Staging.Unmerged .Staging.Deleted .Staging.Added .Staging.Modified .Staging.Untracked) 0 }}<red>{{
                 add .Staging.Unmerged .Staging.Deleted .Staging.Added .Staging.Modified .Staging.Untracked }}</>{{ end
-              }}{{ if add .Working.Deleted .Working.Added .Working.Modified }}<blue>{{  add .Working.Deleted .Working.Added .Working.Modified  }}</>{{ end
+              }}{{ if add .Working.Deleted .Working.Added .Working.Modified }}<#33658A>{{  add .Working.Deleted .Working.Added .Working.Modified  }}</>{{ end
               }}{{ if gt .Working.Untracked 0 }}<grey>󰇘{{ .Working.Untracked }}</>{{ end
               }}{{ if gt .Working.Unmerged  0 }}<yellow>󱐋{{ .Working.Unmerged }}</>{{ end
               }} "
@@ -64,9 +64,18 @@ blocks:
     type: time
 - type: rprompt
   segments:
+  - type: status
+    style: diamond
+    foreground: "#ffffff"
+    background: "#e91e63"
+    leading_diamond: "\ue0b6"
+    trailing_diamond:
+    template: " {{ .Code }} "
+    properties:
+      always_enabled: false
   - type: executiontime
     style: diamond
-    leading_diamond:  "\ue0b2"
+    leading_diamond: "\ue0b2"
     foreground: "#8f8f8f"
     background: "#3C3C3C"
     template: " {{ .FormattedMs }} "
