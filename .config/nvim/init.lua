@@ -25,6 +25,14 @@ require('lazy').setup({
     'tpope/vim-sleuth',
   },
 
+  { -- Move lines/selection
+    'matze/vim-move',
+    init = function()
+      -- disable default key bindings
+      vim.g.move_map_keys = 0
+    end,
+  },
+
   { -- Autocompletion
     'hrsh7th/nvim-cmp',
     dependencies = {
@@ -60,7 +68,7 @@ require('lazy').setup({
       require("nvim-treesitter.install").prefer_git = true
       require("nvim-treesitter.configs").setup {
         ensure_installed = {
-          "ada", "agda", "arduino", "astro", "awk", "bash", "bass", "beancount", "bibtex", "bicep", "blueprint", "c", "c_sharp", "cairo", "capnp", "chatito", "clojure", "cmake", "commonlisp", "cooklang", "corn", "cpon", "cpp", "css", "cuda", "cue", "dart", "devicetree", "dhall", "diff", "dockerfile", "dot", "ebnf", "eex", "elixir", "elm", "elsa", "elvish", "embedded_template", "erlang", "fennel", "firrtl", "fish", "foam", "fortran", "fsh", "func", "fusion", "gdscript", "git_config", "git_rebase", "gitattributes", "gitcommit", "gitignore", "gleam", "glimmer", "glsl", "go", "godot_resource", "gomod", "gosum", "gowork", "graphql", "groovy", "hack", "hare", "haskell", "haskell_persistent", "hcl", "heex", "hjson", "hlsl", "hocon", "hoon", "html", "htmldjango", "http", "hurl", "ini", "ispc", "janet_simple", "java", "javascript", "jq", "jsdoc", "json", "json5", "jsonc", "jsonnet", "julia", "kdl", "kotlin", "lalrpop", "latex", "ledger", "llvm", "lua", "luadoc", "luap", "luau", "m68k", "make", "markdown", "markdown_inline", "matlab", "menhir", "mermaid", "meson", "nickel", "ninja", "nix", "norg", "objc", "ocaml", "ocaml_interface", "odin", "org", "pascal", "passwd", "pem", "perl", "php", "phpdoc", "pioasm", "po", "poe_filter", "pony", "prisma", "promql", "proto", "prql", "pug", "puppet", "python", "ql", "qmldir", "qmljs", "query", "r", "racket", "rasi", "regex", "rego", "rnoweb", "robot", "ron", "rst", "ruby", "rust", "scala", "scheme", "scss", "slint", "smali", "smithy", "solidity", "sparql", "sql", "squirrel", "starlark", "supercollider", "surface", "svelte", "sxhkdrc", "systemtap", "t32", "tablegen", "terraform", "thrift", "tiger", "tlaplus", "todotxt", "toml", "tsx", "turtle", "twig", "typescript", "ungrammar", "usd", "uxntal", "v", "vala", "verilog", "vhs", "vim", "vimdoc", "vue", "wgsl", "wgsl_bevy", "yaml", "yang", "yuck", "zig"
+          "ada", "agda", "arduino", "astro", "awk", "bash", "bass", "beancount", "bibtex", "bicep", "blueprint", "c", "c_sharp", "cairo", "capnp", "chatito", "clojure", "cmake", "commonlisp", "cooklang", "corn", "cpon", "cpp", "css", "cuda", "cue", "dart", "devicetree", "dhall", "diff", "dockerfile", "dot", "ebnf", "eex", "elixir", "elm", "elsa", "elvish", "embedded_template", "erlang", "fennel", "firrtl", "fish", "foam", "fortran", "fsh", "func", "fusion", "gdscript", "git_config", "git_rebase", "gitattributes", "gitcommit", "gitignore", "gleam", "glimmer", "glsl", "go", "godot_resource", "gomod", "gosum", "gowork", "graphql", "groovy", "hack", "hare", "haskell", "haskell_persistent", "hcl", "heex", "hjson", "hlsl", "hocon", "hoon", "html", "htmldjango", "http", "hurl", "ini", "ispc", "janet_simple", "java", "javascript", "jq", "jsdoc", "json", "json5", "jsonc", "jsonnet", "julia", "kdl", "kotlin", "lalrpop", "ledger", "llvm", "lua", "luadoc", "luap", "luau", "m68k", "make", "markdown", "markdown_inline", "matlab", "menhir", "mermaid", "meson", "nickel", "ninja", "nix", "norg", "objc", "ocaml", "ocaml_interface", "odin", "org", "pascal", "passwd", "pem", "perl", "php", "phpdoc", "pioasm", "po", "poe_filter", "pony", "prisma", "promql", "proto", "prql", "pug", "puppet", "python", "ql", "qmldir", "qmljs", "query", "r", "racket", "rasi", "regex", "rego", "rnoweb", "robot", "ron", "rst", "ruby", "rust", "scala", "scheme", "scss", "slint", "smali", "smithy", "solidity", "sparql", "sql", "squirrel", "starlark", "supercollider", "surface", "svelte", "sxhkdrc", "systemtap", "t32", "tablegen", "terraform", "thrift", "tiger", "tlaplus", "todotxt", "toml", "tsx", "turtle", "twig", "typescript", "ungrammar", "usd", "uxntal", "v", "vala", "verilog", "vhs", "vim", "vimdoc", "vue", "wgsl", "wgsl_bevy", "yaml", "yang", "yuck", "zig"
           -- , "comment"
         },
         highlight = { enable = true, },
@@ -307,10 +315,18 @@ require('lazy').setup({
 vim.keymap.set({'n'}, '<Leader>pt', ':TodoLocList<CR>')
 vim.keymap.set({'n'}, '<Leader>vt', function() vim.fn.execute(":TodoLocList cwd=" .. vim.fn.expand('%:p')) end)
 
+-- Bind vim-move
+vim.keymap.set({'v'}, '<A-Up>', '<Plug>MoveBlockUp')
+vim.keymap.set({'v'}, '<A-Down>', '<Plug>MoveBlockDown')
+vim.keymap.set({'v'}, '<A-Left>', '<Plug>MoveBlockLeft')
+vim.keymap.set({'v'}, '<A-Right>', '<Plug>MoveBlockRight')
+
+vim.keymap.set({'i'}, '<A-Up>', function() vim.cmd [[execute "normal \<Plug>MoveLineUp"]] end, { desc = "Move line up", silent = true })
+vim.keymap.set({'i'}, '<A-Down>', function() vim.cmd [[execute "normal \<Plug>MoveLineDown"]] end, { desc = "Move line down", silent = true })
+
 -- Set Theme
 vim.o.background = "dark"
 vim.cmd("colorscheme kanagawa") -- needed for initial reset
--- vim.cmd("colorscheme nightfox")
 vim.cmd("colorscheme nordfox")
 
 
@@ -720,8 +736,6 @@ vim.keymap.set('i', '<C-h>', function ()
 
 end , { desc = "Delete word backwords", silent = true })
 
-vim.keymap.set({'n', 'v', 'i'}, '<M-x>', '<esc>', { desc = "Escape", silent = true })
-
 vim.keymap.set('v', 'a', 'I', { desc = "Enter insert mode in visual mode", silent = true })
 
 vim.keymap.set({'n', 'i'}, '<M-y>', function()
@@ -776,23 +790,13 @@ vim.keymap.set('n', 'p', function ()
   end
 end , { desc = "Paste default buffer", silent = true })
 
-vim.keymap.set({'n', 'i'}, '<M-CR>', '<esc>A<CR><esc>', { desc = "Add new line after current line", silent = true })
-vim.keymap.set({'n', 'i'}, '<M-j>', '<esc>A<CR><esc>', { desc = "Add new line after current line", silent = true })
-
+-- Save file
 vim.keymap.set({'i'}, '<M-w>', '<esc>:w!<CR>a', { desc = "Save file", silent = true })
 vim.keymap.set({'n'}, '<M-w>', '<esc>:w!<CR>', { desc = "Save file", silent = true })
 
-
+-- Split buffer
 vim.keymap.set({'n'}, '<Leader>-', ':sp<CR>', { desc = "Split window horizontally", silent = true })
 vim.keymap.set({'n'}, '<Leader>7', ':vsp<CR>', { desc = "Split window vertically", silent = true })
-
-vim.keymap.set({'x'}, '<M-Down>', ":m'>+<CR>gv=gv", { desc = "Move line down", silent = true })
-vim.keymap.set({'x'}, '<M-Up>',   ':m-2<CR>gv=gv', { desc = "Move line up", silent = true })
-
-vim.keymap.set({'n'}, '<M-Down>', ':m+1<CR>', { desc = "Move line down", silent = true })
-vim.keymap.set({'i'}, '<M-Down>', '<esc>:m+1<CR>a', { desc = "Move line down", silent = true })
-vim.keymap.set({'n'}, '<M-Up>', ':m-2<CR>', { desc = "Move line up", silent = true })
-vim.keymap.set({'i'}, '<M-Up>', '<esc>:m-2<CR>a', { desc = "Move line up", silent = true })
 
 -- Buffers
 vim.keymap.set({'n', 'i'}, '<M-PageUp>', ':bprevious<CR>', { desc = "Show previous buffer", silent = true })
@@ -888,5 +892,7 @@ vim.keymap.set({'i'}, '<Home>', function()
     local s, e = string.find(left, '^[%s]*')
     vim.fn.cursor(vim.fn.line("."), e + 1)
   end
+
 end, { desc = "Pos1 with detour", silent = true })
+
 
