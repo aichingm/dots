@@ -14,11 +14,59 @@ export XDG_CACHE_HOME=${XDG_CACHE_HOME:="$HOME/.cache"}
 export XDG_DATA_HOME=${XDG_DATA_HOME:="$HOME/.local/share"}
 export XDG_STATE_HOME=${XDG_STATE_HOME:="$HOME/.local/state"}
 
-# ---- GTK CONFIG  ---- #
+# ---- GTK CONFIG ---- #
 export GTK_USE_PORTAL=1
 
-# ---- ALIASES  ---- #
+# ---- FIREFOX CONFIG ---- #
+export MOZ_USE_XINPUT2=1
+
+# ---- ELECTRON CONFIG ---- #
+export ELECTRON_TRASH=kioclient5
+
+# ---- ALIASES ---- #
 alias ls='ls --color=auto'
 alias ls='ls -A --color=auto'
 alias rm='trash-put'
+
+# ---- FUNCTIONS ---- #
+
+function open {
+    for var in "$@"
+    do
+        xdg-open "$var"
+    done
+}
+
+function mvld {
+    DOWNLOADS=~/Downloads
+    NEWFILE=$(ls -1c $DOWNLOADS | head -1)
+    if [ -e "$1" ]
+    then
+        DIR=$1
+    else
+        DIR=.
+    fi
+    SOURCE=$(printf "%q/%q" $DOWNLOADS $NEWFILE)
+    TARGET=$(printf "%q/%q" $DIR $NEWFILE)
+    if [ -e "$TARGET" ]
+    then
+        echo Can\'t mv, file $TARGET exists
+        return 1
+    else
+        if mv $SOURCE $TARGET; then
+            echo moved $SOURCE to $TARGET use ↑ to revert
+            if [[ "$(whichshell)" == "zsh" ]]
+            then
+                print -s "mv $TARGET $DOWNLOADS"
+            elif [[ "$(whichshell)" == "bash" ]]
+            then
+                history -s "mv $TARGET $DOWNLOADS"
+            fi
+        fi
+    fi
+}
+
+function whichshell {
+     \ps $$ | \tail -1 | \grep --regexp="[a-zA-Z]*$" --only-matching
+}
 
