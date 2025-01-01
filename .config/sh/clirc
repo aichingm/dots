@@ -4,7 +4,7 @@
 PATH="$HOME/.local/bin:"$PATH
 
 # ---- Default tools ---- #
-export EDITOR="vim"
+export EDITOR="nvim"
 export PAGER="less"
 
 # ---- XDG BASE DIRECTORY ---- #
