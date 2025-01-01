@@ -33,9 +33,18 @@ require('lazy').setup({
     end,
   },
 
+  { -- lsp
+    "neovim/nvim-lspconfig",
+    config = function()
+      local lspconfig = require('lspconfig')
+      lspconfig.gopls.setup{}
+    end,
+  },
+
   { -- Autocompletion
     'hrsh7th/nvim-cmp',
     dependencies = {
+      "neovim/nvim-lspconfig",
       'ray-x/cmp-treesitter',
       'hrsh7th/cmp-path',
       'hrsh7th/cmp-calc',
@@ -44,6 +53,7 @@ require('lazy').setup({
       'saadparwaiz1/cmp_luasnip',
       'rafamadriz/friendly-snippets',
       'hrsh7th/cmp-buffer',
+      'hrsh7th/cmp-nvim-lsp',
     },
   },
 
@@ -90,57 +100,8 @@ require('lazy').setup({
 
   -- theme
   { 'rktjmp/lush.nvim' }, --needed by kimbox
-  -- { "ellisonleao/gruvbox.nvim", priority = 1000 }, --colorful dark/light
-  -- { 'Mofiqul/dracula.nvim' }, --blueish, fe, dark
-  -- { 'glepnir/zephyr-nvim' },  -- lachs,
-  -- { 'tanvirtin/monokai.nvim' }, -- yellow
   { "savq/melange-nvim" }, -- brown/blue, fe, dark easy on the eyes ****
-  -- { 'rmehri01/onenord.nvim' }, -- sol blue
-  -- { "mcchrish/zenbones.nvim" }, -- god collection
-  -- { 'AlexvZyl/nordic.nvim' }, -- green dark
-  -- { "folke/tokyonight.nvim" }, -- clear blue dark
-  -- { 'jacoborus/tender.vim' }, -- blue
-  -- { 'nyoom-engineering/oxocarbon.nvim' }, -- violet dark bright
-  -- { "bluz71/vim-nightfly-colors" },
-  -- { 'bluz71/vim-moonfly-colors' },
-  -- { "yorik1984/newpaper.nvim" }, -- light
-  -- { 'lighthaus-theme/vim-lighthaus' }, -- green clear dark
-  -- {
-  --   "AstroNvim/astrotheme",  -- -(needs lush) -(need setup function) *
-  --   config = function()
-  --     require("astrotheme").setup({
-  --       palette = "astrodark", -- String of the default palette to use when calling `:colorscheme astrotheme`
-  --       background = { -- :h background, palettes to use when using the core vim background colors
-  --         light = "astrolight",
-  --         dark = "astrodark",
-  --       },
-  --     })
-  --   end
-  -- },
-  -- { "lewpoly/sherbet.nvim" }, -- blue orange dark
-  -- { 'lalitmee/cobalt2.nvim' }, -- lua require('colorbuddy').colorscheme('cobalt2')
-  -- { "neanias/everforest-nvim" }, -- green, dark/light, solarized, fe
-  -- { 'uloco/bluloco.nvim' }, -- yellow dark/light
-  -- { 'olivercederborg/poimandres.nvim' }, -- dark green single color
-  -- { 'NTBBloodbath/doom-one.nvim' },
-  -- { 'kvrohit/rasmus.nvim' }, -- dark blue green
-  -- { "lurst/austere.vim" }, -- ultra clean, dark, mono *****
-  -- {'Verf/deepwhite.nvim'}, -- light - not good strings green blocks
-  -- {"sekke276/dark_flat.nvim"}, -- colorful **
-  -- { "xero/miasma.nvim" }, -- dark brown/green
   { "xero/miasma.nvim", },      -- flat brown **
-  -- {"zootedb0t/citruszest.nvim"},  -- ***
-  -- {"2nthony/vitesse.nvim",},
-  -- { 'maxmx03/fluoromachine.nvim' },
-  -- { 'kvrohit/mellow.nvim' }, --
-  -- { 'Yazeed1s/minimal.nvim' }, --
-  -- {"chrsm/paramount-ng.nvim"},
-  -- {'Everblush/nvim'}, -- green blue red dark
-  -- {'frenzyexists/aquarium-vim'}, -- *****
-  -- {'shaunsingh/moonlight.nvim'}, -- ****
-  -- {'ray-x/starry.nvim'}, -- **** (Ukraine)
-  -- {'mhartington/oceanic-next'}, --
-
   { 'rebelot/kanagawa.nvim' }, -- good default , dark, fe
   {"EdenEast/nightfox.nvim"}, -- *****
   { 'alligator/accent.vim' }, -- ***** mono, single color, dark
@@ -262,6 +223,7 @@ require('lazy').setup({
       },
     },
   },
+  
   { -- indentation rails
     "lukas-reineke/indent-blankline.nvim",
     main = "ibl",
@@ -283,6 +245,7 @@ require('lazy').setup({
       vim.keymap.set({'n'}, '<Leader>vi', function() vim.fn.execute("IBLToggle") end, { silent = true, desc = "Toggle indentation rails" })
     end,
   },
+  
   { -- tab bar
     "romgrk/barbar.nvim",
     opts = {
@@ -291,6 +254,7 @@ require('lazy').setup({
      },
     },
   },
+  
   { -- status
     "nvim-lualine/lualine.nvim",
     dependencies = { 'nvim-tree/nvim-web-devicons' },
@@ -299,6 +263,22 @@ require('lazy').setup({
       return { theme = 'gruvbox' }
     end,
   },
+
+  { -- telescope
+    'nvim-telescope/telescope.nvim', tag = '0.1.8',
+    dependencies = { 'nvim-lua/plenary.nvim' },
+    config = function() 
+      require('telescope').setup({
+        defaults = {
+          layout_strategy = 'vertical',
+          layout_config = {
+            vertical = { width = 0.75 }
+          },
+        },
+      })
+    end,
+  },
+
 }, {})
 -- More
 -- Bookmarks https://github.com/tomasky/bookmarks.nvim
@@ -324,10 +304,23 @@ vim.keymap.set({'v'}, '<A-Right>', '<Plug>MoveBlockRight')
 vim.keymap.set({'i'}, '<A-Up>', function() vim.cmd [[execute "normal \<Plug>MoveLineUp"]] end, { desc = "Move line up", silent = true })
 vim.keymap.set({'i'}, '<A-Down>', function() vim.cmd [[execute "normal \<Plug>MoveLineDown"]] end, { desc = "Move line down", silent = true })
 
+-- Bind telescope
+
+local telescope_builtin = require('telescope.builtin')
+vim.keymap.set('n', '<leader>fk', telescope_builtin.keymaps, {})
+vim.keymap.set('n', '<leader>ff', telescope_builtin.find_files, {})
+vim.keymap.set('n', '<leader>fg', telescope_builtin.live_grep, {})
+vim.keymap.set('n', '<leader>fb', telescope_builtin.buffers, {})
+vim.keymap.set('n', '<leader>fr', telescope_builtin.lsp_references, {})
+vim.keymap.set('n', '<leader>fi', telescope_builtin.lsp_implementations, {})
+vim.keymap.set('n', '<leader>fd', telescope_builtin.lsp_definitions, {})
+vim.keymap.set('n', '<leader>ft', telescope_builtin.lsp_type_definitions, {})
+vim.keymap.set('n', '<leader>fs', telescope_builtin.lsp_document_symbols, {})
+
 -- Set Theme
 vim.o.background = "dark"
 vim.cmd("colorscheme kanagawa") -- needed for initial reset
-vim.cmd("colorscheme nordfox")
+vim.cmd("colorscheme terafox")
 
 
 local csDark = {
@@ -342,7 +335,6 @@ local csDark = {
   "fogbell",
   "fogbell_lite",
   "abscs",
-  -- "kimbox", not switchable...
   "melange",
   "miasma",
 }
@@ -353,57 +345,6 @@ local csLight = {
   "monochromenote",
   "fogbell_light",
 }
-
-  -- "citruszest",
-  -- "rasmus",
-  -- "austere",
-  -- "gruvbox",
-  -- "dracula",
-  -- "dracula-soft",
-  -- "zephyr",
-  -- "monokai",
-  -- "monokai_pro",
-  -- "monokai_soda",
-  -- "monokai_ristretto",
-  -- "onenord",
-  -- "zenbones",
-  -- "neobones",
-  -- "vimbones",
-  -- "rosebones",
-  -- "forestbones",
-  -- "nordbones",
-  -- "tokyobones",
-  -- "seoulbones",
-  -- "duckbones",
-  -- "zenburned",
-  -- "kanagawabones",
-  -- "randombones",
-  -- "onedarker",
-  -- "tokyonight",
-  -- "tokyonight-night",
-  -- "tokyonight-storm",
-  -- "tokyonight-day",
-  -- "tokyonight-moon",
-  -- "tender",
-  -- "oxocarbon",
-  -- "nightfly",
-  -- "moonfly",
-  -- "newpaper",
-  -- "lighthaus",
-  -- "astrodark",
-  -- "astrolight",
-  -- "astromars",
-  -- "sherbet",
-  -- "cobalt2",
-  -- "everforest",
-  -- "bluloco",
-  -- "bluloco-dark",
-  -- "bluloco-light",
-  -- "poimandres",
-  -- "vim-monokai-tasty",
-  -- "gruvbox-baby",
-  -- "doom-one",
-
 
 local csDarkIndex = 0
 local csLightIndex = 0
@@ -550,11 +491,12 @@ luasnip.config.setup {}
 
 local cmp_menu_mapping = {
   treesitter = "[TS]",
-  luasnip = "[LS]",
+  luasnip = "[SN]",
   buffer = "[BF]",
   path = "[FS]",
   spell = "[SP]",
   calc = "[CC]",
+  nvim_lsp = "[LS]",
 
 }
 
@@ -572,6 +514,14 @@ local cmp_kind_mapping = {
   Constant = "Cns",
   Text = "Txt",
   Type = "Typ",
+  Property = "Pro",
+  Module = "Mod",
+  Class = "Cls",
+  Struct = "Sct",
+  Interface = "Ifc",
+  Field = "Fld",
+  Keyword = "Kwr",
+  Method = "Mth",
 }
 
 cmp.setup {
@@ -638,6 +588,7 @@ cmp.setup {
   sources = {
     { name = 'calc' },
     { name = 'path' },
+    { name = 'nvim_lsp' },
     -- spell loads f3fora/cmp-spell uses vims spellsuggest to source words
     { name = 'spell',
       option = {
@@ -678,6 +629,27 @@ cmp.setup {
     },
   },
 }
+
+-- LSP keybindings
+
+vim.api.nvim_create_autocmd('LspAttach', {
+  group = vim.api.nvim_create_augroup('UserLspConfig', {}),
+  callback = function(ev)
+    local opts = { buffer = ev.buf }
+    vim.keymap.set('n', '<leader>gD', vim.lsp.buf.declaration, opts)
+    vim.keymap.set('n', '<leader>h', vim.lsp.buf.hover, opts)
+    vim.keymap.set('n', '<leader>H', vim.lsp.buf.signature_help, opts)
+    -- vim.keymap.set('n', '<leader>wa', vim.lsp.buf.add_workspace_folder, opts)
+    -- vim.keymap.set('n', '<leader>wr', vim.lsp.buf.remove_workspace_folder, opts)
+    -- vim.keymap.set('n', '<leader>wl', function() print(vim.inspect(vim.lsp.buf.list_workspace_folders())) end, opts)
+    -- LSP actions
+    vim.keymap.set('n', '<leader>ar', vim.lsp.buf.rename, opts)
+    vim.keymap.set({ 'n', 'v' }, '<leader>ac', vim.lsp.buf.code_action, opts)
+    vim.keymap.set('n', '<leader>af', function()
+      vim.lsp.buf.format { async = true }
+    end, opts)
+  end,
+})
 
 -- Personal Keymappings
 vim.keymap.set('i', '<C-Del>', function ()
