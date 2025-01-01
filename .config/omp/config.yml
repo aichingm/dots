@@ -1,87 +1,84 @@
----
-"$schema": https://raw.githubusercontent.com/JanDeDobbeleer/oh-my-posh/main/themes/schema.json
+# yaml-language-server: $schema=https://raw.githubusercontent.com/JanDeDobbeleer/oh-my-posh/main/themes/schema.json
+
 palette:
-  white: "#FFFFFF"
-  tan: "#CC3802"
-  teal: "#047E84"
-  plum: "#9A348E"
   blush: "#DA627D"
+  plum: "#9A348E"
   salmon: "#FCA17D"
   sky: "#86BBD8"
+  tan: "#CC3802"
+  teal: "#047E84"
   teal_blue: "#33658A"
+  white: "#FFFFFF"
 blocks:
 - type: prompt
   alignment: left
   segments:
-  - background: p:plum
-    foreground: p:white
-#   leading_diamond: ""
-    trailing_diamond: ""
-    style: diamond
+  - properties:
+      cache_duration: none
     template: " {{ .UserName }}"
-    type: session
-  - type: os
-    powerline_symbol: ""
-    style: powerline
     foreground: p:white
     background: p:plum
+    type: session
+    style: diamond
+  - properties:
+      cache_duration: none
     template: " {{.Icon}} "
-  - background: p:blush
     foreground: p:white
-    powerline_symbol: ""
-    properties:
-      style: folder
+    background: p:plum
+    type: os
     style: powerline
+  - properties:
+      cache_duration: none
+      style: folder
     template: " {{ .Path }} "
-    type: path
-  - background: p:salmon
     foreground: p:white
-    powerline_symbol: ""
-    properties:
+    powerline_symbol: 
+    background: p:blush
+    type: path
+    style: powerline
+  - properties:
+      branch_icon: ""
+      branch_identical_icon: ""
       branch_max_length: 25
+      cache_duration: none
       fetch_stash_count: true
       fetch_status: true
       fetch_upstream_icon: true
-      branch_icon: ''
-      branch_identical_icon: ''
-    style: powerline
-    template: " {{ .UpstreamIcon }}{{ .HEAD }}
-              {{if .BranchStatus }}{{ .BranchStatus }}{{ end
-              }}{{ if gt (add .Staging.Unmerged .Staging.Deleted .Staging.Added .Staging.Modified .Staging.Untracked) 0 }}<red>{{
-                add .Staging.Unmerged .Staging.Deleted .Staging.Added .Staging.Modified .Staging.Untracked }}</>{{ end
-              }}{{ if add .Working.Deleted .Working.Added .Working.Modified }}<#33658A>{{  add .Working.Deleted .Working.Added .Working.Modified  }}</>{{ end
-              }}{{ if gt .Working.Untracked 0 }}<grey>󰇘{{ .Working.Untracked }}</>{{ end
-              }}{{ if gt .Working.Unmerged  0 }}<yellow>󱐋{{ .Working.Unmerged }}</>{{ end
-              }} "
-    type: git
-  - background: p:teal_blue
+    template: " {{ .UpstreamIcon }}{{ .HEAD }} {{if .BranchStatus }}{{ .BranchStatus }}{{ end }}{{ if gt (add .Staging.Unmerged .Staging.Deleted .Staging.Added .Staging.Modified .Staging.Untracked) 0 }}<red>\uf444{{ add .Staging.Unmerged .Staging.Deleted .Staging.Added .Staging.Modified .Staging.Untracked }}</>{{ end }}{{ if add .Working.Deleted .Working.Added .Working.Modified }}<#33658A>\uf44d{{  add .Working.Deleted .Working.Added .Working.Modified  }}</>{{ end }}{{ if gt .Working.Untracked 0 }}<grey>\U000f01d8{{ .Working.Untracked }}</>{{ end }}{{ if gt .Working.Unmerged  0 }}<yellow>\U000f140b{{ .Working.Unmerged }}</>{{ end }} "
     foreground: p:white
-    properties:
-      time_format: '15:04'
-    style: diamond
+    powerline_symbol: 
+    background: p:salmon
+    type: git
+    style: powerline
+  - properties:
+      cache_duration: none
+      time_format: "15:04"
+    trailing_diamond: 
     template: " ♥ {{ .CurrentDate | date .Format }} "
-    trailing_diamond: ""
+    foreground: p:white
+    background: p:teal_blue
     type: time
+    style: diamond
 - type: rprompt
   segments:
-  - type: status
-    style: diamond
+  - properties:
+      always_enabled: false
+      cache_duration: none
+    leading_diamond: 
+    template: "\ue23a {{ .Code }} "
     foreground: "#ffffff"
     background: "#e91e63"
-    leading_diamond: "\ue0b6"
-    trailing_diamond:
-    template: " {{ .Code }} "
-    properties:
-      always_enabled: false
-  - type: executiontime
+    type: status
     style: diamond
-    leading_diamond: "\ue0b2"
+  - properties:
+      always_enabled: true
+      cache_duration: none
+      threshold: 500
+    leading_diamond: 
+    template: " {{ .FormattedMs }} "
     foreground: "#8f8f8f"
     background: "#3C3C3C"
-    template: " {{ .FormattedMs }} "
-    properties:
-      threshold: 500
-      always_enabled: true
+    type: executiontime
+    style: diamond
+version: 3
 final_space: true
-version: 2
-
