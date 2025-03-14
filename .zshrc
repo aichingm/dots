@@ -34,6 +34,9 @@ setopt autocd nomatch prompt_subst
 unsetopt beep extendedglob notify
 # End of lines configured by zsh-newuser-install
 
+# set line input mode to emacs
+bindkey -e
+
 if [ "$TERM" = "xterm-256color" ]; then
     # create a zkbd compatible hash;
     # to add other keys to this hash, see: man 5 terminfo
