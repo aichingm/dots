@@ -481,8 +481,8 @@ vim.keymap.set({'n'}, 'k', "v:count == 0 ? 'gk' : 'k'", { expr = true, silent = 
 vim.keymap.set({'n'}, 'j', "v:count == 0 ? 'gj' : 'j'", { expr = true, silent = true })
 vim.keymap.set({'n'}, '<Down>', "v:count == 0 ? 'gj' : 'j'", { expr = true, silent = true })
 vim.keymap.set({'n'}, '<Up>', "v:count == 0 ? 'gk' : 'k'", { expr = true, silent = true })
-vim.keymap.set('i', '<Down>', '<C-o>gj', { silent = true })
-vim.keymap.set('i', '<Up>', '<C-o>gk', { silent = true })
+vim.keymap.set('i', '<Down>', '<cmd>norm! gj<cr>', { silent = true })
+vim.keymap.set('i', '<Up>', '<cmd>norm! gk<cr>', { silent = true })
 
 -- [[ Configure nvim-cmp ]]
 local cmp = require 'cmp'
