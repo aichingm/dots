@@ -16,7 +16,6 @@ stow . -t ~
 * oh-my-posh from https://ohmyposh.dev/
 * zsh-syntax-highlighting
 * zsh-autosuggestions
-* git_status_prompt from https://github.com/deathlyfrantic/git-status-prompt
 
 ## Applications
 
@@ -24,6 +23,12 @@ stow . -t ~
 #### Files
 
 * .config/plasma-workspace/env/env.sh
+
+### GTK
+#### Files
+
+* .config/gtk-4.0/settings.ini
+* .config/gtk-3.0/settings.ini
 
 ### Konsole
 #### Files
