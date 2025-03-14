@@ -71,3 +71,8 @@ stow . -t ~
 #### Files
 
 * .config/sh/clirc
+
+### Tmux
+#### Files
+
+* .config/tmux/tmux.conf
