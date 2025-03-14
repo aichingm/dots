@@ -24,9 +24,9 @@ export MOZ_USE_XINPUT2=1
 export ELECTRON_TRASH=kioclient5
 
 # ---- ALIASES ---- #
-alias ls='ls --color=auto'
 alias ls='ls -A --color=auto'
 alias rm='trash-put'
+alias nn="nvim"
 
 # ---- FUNCTIONS ---- #
 
