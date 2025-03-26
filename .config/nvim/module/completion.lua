@@ -1,10 +1,12 @@
 #!/bin/env lua
 
--- [[ Configure nvim-cmp ]]
-local cmp = require 'cmp'
-local luasnip = require 'luasnip'
+local luasnip = require('luasnip')
 require('luasnip.loaders.from_vscode').lazy_load()
 luasnip.config.setup {}
+
+-- [[ Configure nvim-cmp ]]
+local cmp = require ('cmp')
+local compare = require('cmp.config.compare')
 
 local cmp_menu_mapping = {
   treesitter = "[TS]",
@@ -42,8 +44,11 @@ local cmp_kind_mapping = {
 }
 
 cmp.setup {
+  experimental = {
+    ghost_text = { hl_group = 'Comment' },
+  },
   completion = {
-    autocomplete = false
+    autocomplete = false,
   },
   formatting = {
     fields = { 'abbr', 'kind', 'menu' },
@@ -83,6 +88,10 @@ cmp.setup {
       behavior = cmp.ConfirmBehavior.Replace,
       select = true,
     },
+    ['<Right>'] = cmp.mapping.confirm {
+      behavior = cmp.ConfirmBehavior.Insert,
+      select = true,
+    },
     ['<Tab>'] = cmp.mapping(function(fallback)
       if cmp.visible() then
         cmp.select_next_item()
@@ -101,6 +110,10 @@ cmp.setup {
         fallback()
       end
     end, { 'i', 's' }),
+  },
+  window = {
+    completion = cmp.config.window.bordered(),
+    documentation = cmp.config.window.bordered(),
   },
   sources = {
     { name = 'calc', priority = 100 },
