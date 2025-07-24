@@ -24,7 +24,7 @@ export MOZ_USE_XINPUT2=1
 export ELECTRON_TRASH=kioclient5
 
 # ---- ALIASES ---- #
-alias ls='ls -A --color=auto'
+alias ls='lsd -A --color=auto'
 alias rm='trash-put'
 alias nn="nvim"
 
@@ -39,7 +39,7 @@ function open {
 
 function mvld {
     DOWNLOADS=~/Downloads
-    NEWFILE=$(ls -1c $DOWNLOADS | head -1)
+    NEWFILE=$(\ls -1c $DOWNLOADS | head -1)
     if [ -e "$1" ]
     then
         DIR=$1
