@@ -44,7 +44,7 @@ blocks:
       fetch_stash_count: true
       fetch_status: true
       fetch_upstream_icon: true
-    template: " {{ .UpstreamIcon }}{{ .HEAD }} {{if .BranchStatus }}{{ .BranchStatus }}{{ end }}{{ if gt (add .Staging.Unmerged .Staging.Deleted .Staging.Added .Staging.Modified .Staging.Untracked) 0 }}<red>\uf444{{ add .Staging.Unmerged .Staging.Deleted .Staging.Added .Staging.Modified .Staging.Untracked }}</>{{ end }}{{ if add .Working.Deleted .Working.Added .Working.Modified }}<#33658A>\uf44d{{  add .Working.Deleted .Working.Added .Working.Modified  }}</>{{ end }}{{ if gt .Working.Untracked 0 }}<grey>\U000f01d8{{ .Working.Untracked }}</>{{ end }}{{ if gt .Working.Unmerged  0 }}<yellow>\U000f140b{{ .Working.Unmerged }}</>{{ end }} "
+    template: " {{ .UpstreamIcon }} {{ .HEAD }} {{if .BranchStatus }}{{ .BranchStatus }}{{ end }}{{ if gt (add .Staging.Unmerged .Staging.Deleted .Staging.Added .Staging.Modified .Staging.Untracked) 0 }}<red>\uf444{{ add .Staging.Unmerged .Staging.Deleted .Staging.Added .Staging.Modified .Staging.Untracked }}</>{{ end }}{{ if add .Working.Deleted .Working.Added .Working.Modified }}<#33658A>\uf44d{{  add .Working.Deleted .Working.Added .Working.Modified  }}</>{{ end }}{{ if gt .Working.Untracked 0 }}<grey>\U000f01d8{{ .Working.Untracked }}</>{{ end }}{{ if gt .Working.Unmerged  0 }}<yellow>\U000f140b{{ .Working.Unmerged }}</>{{ end }} "
     foreground: p:white
     powerline_symbol: 
     background: p:salmon
@@ -59,6 +59,20 @@ blocks:
     background: p:teal_blue
     type: time
     style: diamond
+  - type: battery
+    style: diamond
+    trailing_diamond : 
+    foreground: p:white
+    background: "#ffeb3b"
+    background_templates:
+      - '{{if eq "Charging" .State.String}}#4EA5C3{{end}}'
+      - '{{if eq "Discharging" .State.String}}#DB8394{{end}}'
+      - '{{if eq "Full" .State.String}}#78DCB9{{end}}'
+    template: "{{ if not .Error }} {{ .Icon }}{{ .Percentage }} {{ end }}"
+    properties:
+      discharging_icon: " "
+      charging_icon: " "
+      charged_icon: " "
 - type: rprompt
   segments:
   - properties:
