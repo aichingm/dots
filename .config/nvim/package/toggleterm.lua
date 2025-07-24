@@ -6,7 +6,7 @@ return {
   version = "*",
   opts = {
     direction = 'float',
-    open_mapping = "<Leader>t",
-    insert_mappings = false,
+    open_mapping = "<M-t>",
+    insert_mappings = true,
   },
 }
