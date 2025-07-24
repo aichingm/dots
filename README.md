@@ -3,7 +3,7 @@
 ## Install
 
 ```
-stow . -t ~
+stow --no-folding . -t ~
 ```
 
 ## Dependencies
@@ -16,6 +16,10 @@ stow . -t ~
 * oh-my-posh from https://ohmyposh.dev/
 * zsh-syntax-highlighting
 * zsh-autosuggestions
+* less
+* lsd
+* neovim
+* trash-cli
 
 ## Applications
 
@@ -44,8 +48,7 @@ stow . -t ~
 ### Nvim
 #### Files
 
-* .config/nvim/init.lua
-* .config/nvim/lazy-lock.json
+* .config/nvim/...
 
 ### Zsh
 #### Files
