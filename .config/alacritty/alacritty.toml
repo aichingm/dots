@@ -7,18 +7,13 @@ opacity = 1
 [font]
 normal = { family = "FiraCode Nerd Font", style = "Regular" }
 bold = { family = "FiraCode Nerd Font", style = "Bold" }
+size = 14
 
-#[colors]
-#cursor = { text = "#ffffff", cursor = "#00aa7f" }
-
-#[cursor]
-#style = { shape = "Block", blinking = "On" }
+[cursor]
+style = { shape = "Block", blinking = "On" }
 
 [terminal]
 shell = "/usr/bin/zsh"
-
-[keyboard]
-bindings = []
 
 # Default colors
 [colors.primary]
@@ -51,3 +46,10 @@ blue    = '#1BA6FA'
 magenta = '#A578EA'
 cyan    = '#73FBF1'
 white   = '#FEFEF8'
+
+[[keyboard.bindings]]
+key = "N"
+mods = "Control|Shift"
+action = "SpawnNewInstance"
+
+
