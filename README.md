@@ -20,8 +20,20 @@ stow --no-folding . -t ~
 * lsd
 * neovim
 * trash-cli
+* ripgrep
+* stow
+
+### LSPs
+* clang
+* gopls
+* serve-d
 
 ## Applications
+
+### Alacritty
+#### Files
+
+* .config/alacritty/alacritty.toml
 
 ### Kde Plasma
 #### Files
@@ -48,7 +60,7 @@ stow --no-folding . -t ~
 ### Nvim
 #### Files
 
-* .config/nvim/...
+* .config/nvim/*
 
 ### Zsh
 #### Files
