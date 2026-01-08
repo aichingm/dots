@@ -53,3 +53,12 @@ mods = "Control|Shift"
 action = "SpawnNewInstance"
 
 
+[[hints.enabled]]
+command         = "xdg-open"
+hyperlinks      = false
+post_processing = true
+persist         = false
+mouse.enabled   = true
+mouse.mods      = "Control"
+binding         = { key = "O", mods = "Control|Shift" }
+regex           = "(mailto:|https://|http://|file:)[^\u0000-\u001F\u007F-\u009F<>\"\\s{-}\\^⟨⟩`]+"
