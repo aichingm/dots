@@ -16,3 +16,10 @@ vim.keymap.set('i', '<C-h>',
   { desc = "Delete word backwords", silent = true }
 )
 
+vim.keymap.set('i', '<C-BS>',
+  function ()
+    del.word_backward()
+  end,
+  { desc = "Delete word backwords", silent = true }
+)
+
