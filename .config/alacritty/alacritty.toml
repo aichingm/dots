@@ -52,6 +52,10 @@ key = "N"
 mods = "Control|Shift"
 action = "SpawnNewInstance"
 
+[[keyboard.bindings]]
+key = "F11"
+mods = "Super"
+action = "ToggleFullscreen"
 
 [[hints.enabled]]
 command         = "xdg-open"
