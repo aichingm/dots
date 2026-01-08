@@ -2,7 +2,7 @@
 
 vim.o.background = "dark"
 vim.cmd("colorscheme kanagawa") -- needed for initial reset
-vim.cmd("colorscheme terafox")
+vim.cmd("colorscheme nordfox")
 
 local csDark = {
   "kanagawa",
