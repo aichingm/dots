@@ -6,9 +6,10 @@ require('core.leader')
 require('core.lazy')
 require('lazy').setup({
   require("package.barbar"),
-  require("package.codewindow"),
+  -- require("package.codewindow"),
   require("package.gitsigns"),
   require("package.indent-blankline"),
+  require("package.lua-snip"),
   require("package.lualine"),
   require("package.neo-tree"),
   require("package.nvim-cmp"),
@@ -36,6 +37,7 @@ require('lazy').setup({
 -- Folding https://github.com/anuvyklack/pretty-fold.nvim
 
 require('core.vim')
+require('core.lsp')
 
 require("keymap.buffer")
 require("keymap.copy_paste")
