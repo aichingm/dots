@@ -26,6 +26,7 @@ local cmp_kind_mapping = {
   Snippet = "Snp",
   -- treesitter
   Variable = "Var",
+  VariableBuiltin = "Var",
   VariableMember = "Var",
   Text = "Txt",
   FunctionMethod = "Met",
