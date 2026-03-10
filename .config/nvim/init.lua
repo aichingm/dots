@@ -1,7 +1,9 @@
 #!/bin/env lua
 package.path = package.path .. ";" .. vim.fn.stdpath('config') .. "/?.lua"
 
+require('core.early')
 require('core.leader')
+require("core.style")
 
 require('core.lazy')
 require('lazy').setup({
@@ -59,6 +61,5 @@ require("module.spelling")
 require("module.tabs")
 require("module.whitespace")
 
-require("style.vim")
 require("style.theme")
 

@@ -5,7 +5,7 @@
 --vim.o.ruler = false
 --vim.o.showcmd = false
 vim.o.cmdheight = 0
-vim.opt.laststatus = 0
+vim.o.laststatus = 0
 
 -- highlight current line
 vim.o.cursorline = true
@@ -19,7 +19,7 @@ vim.o.guicursor = "n-v-c-sm:block,i-ci-ve:block,r-cr-o:hor20,a:blinkwait700-blin
 vim.o.hlsearch = false
 
 -- Enable line numbers
-vim.wo.number = true
 vim.o.relativenumber = true
 
+vim.o.termguicolors = true
 
