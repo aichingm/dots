@@ -19,6 +19,7 @@ vim.o.guicursor = "n-v-c-sm:block,i-ci-ve:block,r-cr-o:hor20,a:blinkwait700-blin
 vim.o.hlsearch = false
 
 -- Enable line numbers
+vim.o.number = true
 vim.o.relativenumber = true
 
 vim.o.termguicolors = true
