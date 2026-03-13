@@ -42,14 +42,41 @@ local cmp_kind_mapping = {
   Field = "Fld",
   Keyword = "Kwr",
   Method = "Mth",
+  Spell = "Spl",
 }
+
+local function border(hl_name)
+	return {
+		{ "╭", hl_name },
+		{ "─", hl_name },
+		{ "╮", hl_name },
+		{ "│", hl_name },
+		{ "╯", hl_name },
+		{ "─", hl_name },
+		{ "╰", hl_name },
+		{ "│", hl_name },
+	}
+end
 
 cmp.setup {
   experimental = {
     ghost_text = { hl_group = 'Comment' },
   },
+  window = {
+    completion = {
+      side_padding = 1,
+      winhighlight = "Normal:CmpPmenu,CursorLine:PmenuSel,Search:PmenuSel",
+      scrollbar = false,
+      border = border "CmpDocBorder",
+    },
+    documentation = {
+      border = border "CmpDocBorder",
+      winhighlight = "Normal:CmpDoc",
+    },
+  },
   completion = {
     autocomplete = false,
+    completeopt = "menu,menuone",
   },
   formatting = {
     fields = { 'abbr', 'kind', 'menu' },
@@ -65,10 +92,10 @@ cmp.setup {
     end
   },
   mapping = cmp.mapping.preset.insert {
-    ['<C-n>'] = cmp.mapping.select_next_item(),
-    ['<C-p>'] = cmp.mapping.select_prev_item(),
-    ['<C-d>'] = cmp.mapping.scroll_docs(-4),
-    ['<C-f>'] = cmp.mapping.scroll_docs(4),
+    ['<C-down>'] = cmp.mapping.scroll_docs(-4),
+    ['<C-up>'] = cmp.mapping.scroll_docs(4),
+    ['<PageDown>'] = cmp.mapping.select_next_item({behavior = cmp.SelectBehavior, count = 4}),
+    ['<PageUp>'] = cmp.mapping.select_prev_item({behavior = cmp.SelectBehavior, count = 4}),
     ['<C-Space>'] = cmp.mapping({
         i = function()
           if cmp.visible() then
@@ -111,10 +138,6 @@ cmp.setup {
         fallback()
       end
     end, { 'i', 's' }),
-  },
-  window = {
-    completion = cmp.config.window.bordered(),
-    documentation = cmp.config.window.bordered(),
   },
   sources = {
     { name = 'calc', priority = 100 },
@@ -161,6 +184,14 @@ cmp.setup {
           kind ~= 'StringRegexp' and
           kind ~= 'NonePunctuationSpecial' and
           kind ~= 'ConstantBuiltin' and
+          kind ~= 'MarkupList' and
+          kind ~= 'MarkupRawBlock' and
+          kind ~= 'MarkupHeading1' and
+          kind ~= 'MarkupHeading2' and
+          kind ~= 'MarkupHeading3' and
+          kind ~= 'MarkupHeading4' and
+          kind ~= 'MarkupHeading5' and
+          kind ~= 'MarkupHeading6' and
           not string.match(kind, "Keyword.*")
       end,
       priority = 90,
