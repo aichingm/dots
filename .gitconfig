@@ -21,3 +21,11 @@
 [user]
 	email = aichingm@gmail.com
 	name = Mario Aichinger
+
+# delta pager
+[delta]
+	navigate = true
+	dark = true
+	side-by-side = true
+	line-numbers = true
+

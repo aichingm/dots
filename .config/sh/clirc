@@ -27,6 +27,7 @@ export ELECTRON_TRASH=kioclient5
 alias ls='lsd -A --color=auto'
 alias rm='trash-put'
 alias nn="nvim"
+alias dit="GIT_PAGER=delta git --config-env=core.pager=GIT_PAGER "
 
 # ---- FUNCTIONS ---- #
 
