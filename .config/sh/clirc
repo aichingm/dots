@@ -1,11 +1,17 @@
 #!/bin/bash
 
+function has {
+    command -v $1 >/dev/null 2>&1
+    return $?
+}
+
 # ---- PATH  ---- #
 PATH="$HOME/.local/bin:"$PATH
 
 # ---- Default tools ---- #
-export EDITOR="nvim"
-export PAGER="less"
+export EDITOR="vi"
+has nvim && export EDITOR="nvim"
+has less && export PAGER="less"
 
 # ---- XDG BASE DIRECTORY ---- #
 # https://wiki.archlinux.org/title/XDG_Base_Directory
@@ -24,10 +30,10 @@ export MOZ_USE_XINPUT2=1
 export ELECTRON_TRASH=kioclient5
 
 # ---- ALIASES ---- #
-alias ls='lsd -A --color=auto'
-alias rm='trash-put'
-alias nn="nvim"
-alias dit="GIT_PAGER=delta git --config-env=core.pager=GIT_PAGER "
+has lsd && alias ls='lsd -A --color=auto'
+has trash-put && alias rm='trash-put'
+has nvim && alias nn="nvim"
+has delta && alias delta-git="GIT_PAGER=delta git --config-env=core.pager=GIT_PAGER "
 
 # ---- FUNCTIONS ---- #
 
