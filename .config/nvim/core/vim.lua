@@ -15,3 +15,4 @@ vim.o.breakindent = true
 vim.o.ignorecase = true
 vim.o.smartcase = true
 
+vim.o.signcolumn = "yes:1"

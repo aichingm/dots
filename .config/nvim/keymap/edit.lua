@@ -10,14 +10,6 @@ vim.keymap.set({'i'}, '<M-r>',
   { desc = "Replace current word", silent = true }
 )
 
-vim.keymap.set({'n'}, '<M-r>',
-  function ()
-    mv.begin_word(false)
-    vim.fn.feedkeys(vim.api.nvim_replace_termcodes('ve"hy<esc>:%s/<C-r>h/<C-r>h/g<left><left>', true, false, true)) -- escape, enter v mode, select to end of word, activate register h, yank, escape, substitute
-  end,
-  { desc = "Replace current word", silent = true }
-)
-
 vim.keymap.set({'v'}, '<M-r>',
   function()
     vim.fn.feedkeys(vim.api.nvim_replace_termcodes('"hy:%s/<C-r>h/<C-r>h/g<left><left>', true, false, true))

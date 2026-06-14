@@ -17,6 +17,7 @@ return {
       opts = {
         sources = { "filesystem", "buffers", "git_status", "document_symbols" },
       },
+      popup_border_style = "",
       window = {
         width = 35,
         mappings = {

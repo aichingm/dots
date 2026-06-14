@@ -1,29 +1,16 @@
 #!/bin/env lua
 
-vim.o.background = "dark"
-vim.cmd("colorscheme kanagawa") -- needed for initial reset
-vim.cmd("colorscheme nordfox")
-
 local csDark = {
-  "kanagawa",
   "nightfox",
   "duskfox",
   "nordfox",
   "terafox",
   "carbonfox",
-  "accent",
-  "atlas",
-  "fogbell",
-  "abscs",
-  "melange",
-  "miasma",
 }
 
 local csLight = {
   "dayfox",
   "dawnfox",
-  "monochromenote",
-  "fogbell_light",
 }
 
 local csDarkIndex = 0

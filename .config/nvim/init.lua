@@ -7,17 +7,13 @@ require("core.style")
 
 require('core.lazy')
 require('lazy').setup({
-  require("package.barbar"),
-  -- require("package.codewindow"),
   require("package.gitsigns"),
   require("package.indent-blankline"),
-  require("package.lua-snip"),
   require("package.lualine"),
   require("package.neo-tree"),
   require("package.nvim-cmp"),
   require("package.nvim-lspconfig"),
   require("package.nvim-notify"),
-  require("package.nvim-treesitter"),
   require("package.outline"),
   require("package.telescope"),
   require("package.themes"),
@@ -56,7 +52,6 @@ require("module.completion")
 require("module.lsp")
 require("module.movment")
 require("module.scroll")
-require("module.snippet")
 require("module.spelling")
 require("module.tabs")
 require("module.whitespace")

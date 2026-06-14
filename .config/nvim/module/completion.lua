@@ -1,16 +1,14 @@
 #!/bin/env lua
 
-local luasnip = require('luasnip')
-require('luasnip.loaders.from_vscode').lazy_load()
-luasnip.config.setup {}
-
 -- [[ Configure nvim-cmp ]]
 local cmp = require ('cmp')
 local compare = require('cmp.config.compare')
 
+
+local spell = require("module.cmp.spell")
+cmp.register_source(spell.get_debug_name(), spell.new())
+
 local cmp_menu_mapping = {
-  treesitter = "[TS]",
-  luasnip = "[SN]",
   ["buffer-lines"] = "[LN]",
   buffer = "[BF]",
   path = "[FS]",
@@ -23,26 +21,6 @@ local cmp_kind_mapping = {
   -- path
   File = "Fil",
   Folder = "Dir",
-  Snippet = "Snp",
-  -- treesitter
-  Variable = "Var",
-  VariableBuiltin = "Var",
-  VariableMember = "Var",
-  Text = "Txt",
-  FunctionMethod = "Met",
-  Function = "Fnc",
-  Constant = "Cns",
-  Text = "Txt",
-  Type = "Typ",
-  Property = "Pro",
-  Module = "Mod",
-  Class = "Cls",
-  Struct = "Sct",
-  Interface = "Ifc",
-  Field = "Fld",
-  Keyword = "Kwr",
-  Method = "Mth",
-  Spell = "Spl",
 }
 
 local function border(hl_name)
@@ -123,8 +101,6 @@ cmp.setup {
     ['<Tab>'] = cmp.mapping(function(fallback)
       if cmp.visible() then
         cmp.select_next_item()
-      elseif luasnip.expand_or_locally_jumpable() then
-        luasnip.expand_or_jump()
       else
         fallback()
       end
@@ -132,8 +108,6 @@ cmp.setup {
     ['<S-Tab>'] = cmp.mapping(function(fallback)
       if cmp.visible() then
         cmp.select_prev_item()
-      elseif luasnip.locally_jumpable(-1) then
-        luasnip.jump(-1)
       else
         fallback()
       end
@@ -151,50 +125,14 @@ cmp.setup {
        max_item_count = 1,
        priority = 97,
     },
-    -- spell loads f3fora/cmp-spell uses vims spellsuggest to source words
+    -- spell uses vims spellsuggest to source words
     { name = 'spell',
-      option = {
-        keep_all_entries = true,
-        enable_in_context = function() return true end,
-      },
       entry_filter = function(entry, ctx)
         -- only show words without spaces
         return string.find(entry:get_word(), " ") == nil
       end,
       max_item_count = 5,
       priority = 96,
-    },
-    -- luasnip loads saadparwaiz1/cmp_luasnip which depends on L3MON4D3/LuaSnip which loads templates from rafamadriz/friendly-snippets
-    { name = 'luasnip', option = { use_show_condition = false },
-      max_item_count = 5,
-      priority = 98,
-    },
-    { name = 'treesitter',
-      entry_filter = function(entry, ctx)
-        -- filter simple text tokens
-        local kind = entry:get_vim_item(0).kind
-        return kind ~= 'Text' and
-          kind ~= 'Number' and
-          kind ~= 'Boolean' and
-          kind ~= 'String' and
-          kind ~= 'Operator' and
-          kind ~= 'Comment' and
-          kind ~= 'Constructor' and
-          kind ~= 'StringEscape' and
-          kind ~= 'StringRegexp' and
-          kind ~= 'NonePunctuationSpecial' and
-          kind ~= 'ConstantBuiltin' and
-          kind ~= 'MarkupList' and
-          kind ~= 'MarkupRawBlock' and
-          kind ~= 'MarkupHeading1' and
-          kind ~= 'MarkupHeading2' and
-          kind ~= 'MarkupHeading3' and
-          kind ~= 'MarkupHeading4' and
-          kind ~= 'MarkupHeading5' and
-          kind ~= 'MarkupHeading6' and
-          not string.match(kind, "Keyword.*")
-      end,
-      priority = 90,
     },
     -- ?? buffer loads hrsh7th/cmp-buffer which sources words from open buffers
     { name = 'buffer',
